@@ -35,7 +35,10 @@ func main() {
 		tmpl.ExecuteTemplate(w, "film-list-element", Film{Title: title, Director: director})
 	}
 
-	http.HandleFunc("GET /", templateFunction)
+	fs := http.FileServer(http.Dir("static"))
+	http.Handle("/static/*", http.StripPrefix("/static/", fs))
+
+	http.HandleFunc("/", templateFunction)
 	http.HandleFunc("POST /add-film/", addFunction)
 
 	log.Fatal(http.ListenAndServe(":8000", nil))
