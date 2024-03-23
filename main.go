@@ -28,12 +28,11 @@ func main() {
 		tmpl.Execute(w, films)
 	}
 	addFunction := func(w http.ResponseWriter, r *http.Request) {
-		time.Sleep(2 * time.Second)
+		time.Sleep(1 * time.Second)
 		title := r.PostFormValue("title")
 		director := r.PostFormValue("director")
-		htmlStr := fmt.Sprintf("<li class='list-group-item bg-primary text-white'>%s - %s</li>", title, director)
-		tmpl, _ := template.New("dummy").Parse(htmlStr)
-		tmpl.Execute(w, nil)
+		tmpl := template.Must(template.ParseFiles("index.html"))
+		tmpl.ExecuteTemplate(w, "film-list-element", Film{Title: title, Director: director})
 	}
 
 	http.HandleFunc("GET /", templateFunction)
