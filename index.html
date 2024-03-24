@@ -10,11 +10,55 @@
 
     <title>go-htmx-todos</title>
 </head>
-<body>
+<body class=" flex items-center justify-center">
+    <div class="bg-white shadow-lg rounded-lg mt-6 w-1/2">
+        <div class="px-4 py-2">
+            <h1 class="text-gray-800 font-bold text-2xl text-center">GO HTMX ToDo-List</h1>
+        </div>
+        <form class="w-full  mx-auto px-4 py-2">
+            <div class="flex items-center border-b-2 border-teal-500 py-2">
+                <input
+                        class="w-full text-gray-700 mr-3 py-1 px-2 focus:outline-none" type="text" placeholder="Add a task">
+                <button
+                        class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
+                        type="button">
+                    Add
+                </button>
+            </div>
+        </form>
+        <ul class="divide-y divide-gray-200 px-4">
+            <li class="py-4">
+                <div class="flex items-center">
+                    <input id="todo1" name="todo1" type="checkbox"
+                           class="h-4 w-4 border-gray-300 rounded">
+                    <label for="todo1" class="ml-3 block text-gray-900">
+                        <span class="text-lg font-medium">Finish project proposal</span>
+                    </label>
+                </div>
+            </li>
+            <li class="py-4">
+                <div class="flex items-center">
+                    <input id="todo2" name="todo2" type="checkbox"
+                           class="h-4 w-4 border-gray-300 rounded">
+                    <label for="todo2" class="ml-3 block text-gray-900">
+                        <span class="text-lg font-medium">Buy groceries</span>
+                    </label>
+                </div>
+            </li>
+            <li class="py-4">
+                <div class="flex items-center">
+                    <input id="todo3" name="todo3" type="checkbox"
+                           class="h-4 w-4 border-gray-300 rounded">
+                    <label for="todo3" class="ml-3 block text-teal-700">
+                        <span class="text-lg font-medium line-through">Go for a run</span>
+                    </label>
+                </div>
+            </li>
+        </ul>
+    </div>
 
-    <h1 class="text-3xl font-bold underline">
-        Hello world!
-    </h1>
+
+
     <!--<div class="row mt-4 g-4">
         <div class="col-8">
             <h1 class="mb-4">Film List</h1>
