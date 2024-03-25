@@ -15,45 +15,40 @@
         <div class="px-4 py-2">
             <h1 class="text-gray-800 font-bold text-2xl text-center">GO HTMX ToDo-List</h1>
         </div>
-        <form class="w-full  mx-auto px-4 py-2">
+        <form class="w-full  mx-auto px-4 py-2" hx-post="/add-todo/" hx-target="#todo-list" hx-swap="beforeend" hx-indicator="#spinner">
             <div class="flex items-center border-b-2 border-teal-500 py-2">
                 <input
-                        class="w-full text-gray-700 mr-3 py-1 px-2 focus:outline-none" type="text" placeholder="Add a task">
+                        id="new-todo" name="title" class="w-full text-gray-700 mr-3 py-1 px-2 focus:outline-none" type="text" placeholder="Add a task">
                 <button
-                        class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
-                        type="button">
+                        class="flex-shrink-0 flex pr-5 justify-center items-center bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded"
+                        type="submit">
+                    <div
+                            id="spinner"
+                            class="inline-block h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white htmx-indicator"
+                            role="status">
+                        <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
+                    </div>
                     Add
                 </button>
+
+
             </div>
         </form>
-        <ul class="divide-y divide-gray-200 px-4">
-            <li class="py-4">
-                <div class="flex items-center">
-                    <input id="todo1" name="todo1" type="checkbox"
-                           class="h-4 w-4 border-gray-300 rounded">
-                    <label for="todo1" class="ml-3 block text-gray-900">
-                        <span class="text-lg font-medium">Finish project proposal</span>
-                    </label>
-                </div>
-            </li>
-            <li class="py-4">
-                <div class="flex items-center">
-                    <input id="todo2" name="todo2" type="checkbox"
-                           class="h-4 w-4 border-gray-300 rounded">
-                    <label for="todo2" class="ml-3 block text-gray-900">
-                        <span class="text-lg font-medium">Buy groceries</span>
-                    </label>
-                </div>
-            </li>
-            <li class="py-4">
-                <div class="flex items-center">
-                    <input id="todo3" name="todo3" type="checkbox"
-                           class="h-4 w-4 border-gray-300 rounded">
-                    <label for="todo3" class="ml-3 block text-teal-700">
-                        <span class="text-lg font-medium line-through">Go for a run</span>
-                    </label>
-                </div>
-            </li>
+        <ul class="divide-y divide-gray-200 px-4" id="todo-list">
+            {{ range .Todos }}
+                {{ block "todo-list-element" .}}
+                    <li class="py-4">
+                        <div class="flex items-center">
+                            <input id="{{ .Id }}" name="todo1" type="checkbox"
+                                   {{if eq .Done true }}checked{{end}}
+                                   class="h-4 w-4 border-gray-300 rounded">
+                            <label for="{{ .Id }}" class="ml-3 block text-gray-900">
+                                <span class="text-lg font-medium {{if eq .Done true }}line-through{{end}}">{{ .Title }}</span>
+                            </label>
+                        </div>
+                    </li>
+                {{ end }}
+            {{ end }}
         </ul>
     </div>
 

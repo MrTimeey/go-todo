@@ -2,44 +2,44 @@ package main
 
 import (
 	"fmt"
+	"github.com/google/uuid"
 	"html/template"
 	"log"
 	"net/http"
 	"time"
 )
 
-type Film struct {
-	Title    string
-	Director string
+type ToDo struct {
+	Id    string
+	Title string
+	Done  bool
 }
 
 func main() {
-	fmt.Println("Hello, world.")
-
 	templateFunction := func(w http.ResponseWriter, r *http.Request) {
 		tmpl := template.Must(template.ParseFiles("index.html"))
-		films := map[string][]Film{
-			"Films": {
-				{Title: "The Godfather", Director: "Francis Ford Coppola"},
-				{Title: "Blade Runner", Director: "Ridley Scott"},
-				{Title: "The Thing", Director: "John Carpenter"},
+		todos := map[string][]ToDo{
+			"Todos": {
+				{Id: "3f665f1a-64bd-4507-ace7-a10ebc1b7da9", Title: "Finish project proposal", Done: false},
+				{Id: "96e9c5e3-1d81-4a43-9cb5-39e596a5b348", Title: "Buy groceries", Done: false},
+				{Id: "ce3270c7-e1fe-481d-9eb8-04938dd9d395", Title: "Go for a run", Done: true},
 			},
 		}
-		tmpl.Execute(w, films)
+		tmpl.Execute(w, todos)
 	}
 	addFunction := func(w http.ResponseWriter, r *http.Request) {
 		time.Sleep(1 * time.Second)
 		title := r.PostFormValue("title")
-		director := r.PostFormValue("director")
 		tmpl := template.Must(template.ParseFiles("index.html"))
-		tmpl.ExecuteTemplate(w, "film-list-element", Film{Title: title, Director: director})
+		tmpl.ExecuteTemplate(w, "todo-list-element", ToDo{Id: uuid.New().String(), Title: title, Done: false})
 	}
 
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/static/*", http.StripPrefix("/static/", fs))
 
 	http.HandleFunc("/", templateFunction)
-	http.HandleFunc("POST /add-film/", addFunction)
+	http.HandleFunc("POST /add-todo/", addFunction)
 
+	fmt.Println("Server up and running at port 8000")
 	log.Fatal(http.ListenAndServe(":8000", nil))
 }
