@@ -45,7 +45,7 @@
                                    {{if eq .Done true }}checked{{end}}
                                    class="h-4 w-4 border-gray-300 rounded">
                             <label for="{{ .Id }}" class="ml-3 block text-gray-900">
-                                <span name="title" class="text-lg font-medium {{if eq .Done true }}line-through{{end}}">{{ .Title }}</span>
+                                <span class="text-lg font-medium {{if eq .Done true }}line-through{{end}}">{{ .Title }}</span>
                             </label>
                         </div>
                     </li>
