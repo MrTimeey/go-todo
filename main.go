@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -33,12 +34,20 @@ func main() {
 		tmpl := template.Must(template.ParseFiles("index.html"))
 		tmpl.ExecuteTemplate(w, "todo-list-element", ToDo{Id: uuid.New().String(), Title: title, Done: false})
 	}
+	checkFunction := func(w http.ResponseWriter, r *http.Request) {
+		title := r.PostFormValue("title")
+		currentState, _ := strconv.ParseBool(r.PostFormValue("currentState"))
+		id := r.PostFormValue("id")
+		tmpl := template.Must(template.ParseFiles("index.html"))
+		tmpl.ExecuteTemplate(w, "todo-list-element", ToDo{Id: id, Title: title, Done: !currentState})
+	}
 
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/static/*", http.StripPrefix("/static/", fs))
 
 	http.HandleFunc("/", templateFunction)
 	http.HandleFunc("POST /add-todo/", addFunction)
+	http.HandleFunc("POST /check-todo/", checkFunction)
 
 	fmt.Println("Server up and running at port 8000")
 	log.Fatal(http.ListenAndServe(":8000", nil))

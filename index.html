@@ -37,13 +37,15 @@
         <ul class="divide-y divide-gray-200 px-4" id="todo-list">
             {{ range .Todos }}
                 {{ block "todo-list-element" .}}
-                    <li class="py-4">
+                    <li class="py-4 todo-item">
                         <div class="flex items-center">
-                            <input id="{{ .Id }}" name="todo1" type="checkbox"
+                            <input id="{{ .Id }}" name="complete" type="checkbox"
+                                   hx-post="/check-todo/" hx-target="closest .todo-item" hx-swap="outerHTML"
+                                   hx-vars="id:'{{ .Id }}',currentState:'{{.Done}}',title:'{{.Title}}'"
                                    {{if eq .Done true }}checked{{end}}
                                    class="h-4 w-4 border-gray-300 rounded">
                             <label for="{{ .Id }}" class="ml-3 block text-gray-900">
-                                <span class="text-lg font-medium {{if eq .Done true }}line-through{{end}}">{{ .Title }}</span>
+                                <span name="title" class="text-lg font-medium {{if eq .Done true }}line-through{{end}}">{{ .Title }}</span>
                             </label>
                         </div>
                     </li>
