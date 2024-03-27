@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"time"
 )
 
 type ToDo struct {
@@ -29,7 +28,6 @@ func main() {
 		tmpl.Execute(w, todos)
 	}
 	addFunction := func(w http.ResponseWriter, r *http.Request) {
-		time.Sleep(1 * time.Second)
 		title := r.PostFormValue("title")
 		tmpl := template.Must(template.ParseFiles("index.html"))
 		tmpl.ExecuteTemplate(w, "todo-list-element", ToDo{Id: uuid.New().String(), Title: title, Done: false})
