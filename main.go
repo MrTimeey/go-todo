@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/google/uuid"
 	"html/template"
 	"log"
 	"net/http"
 	"strconv"
+
+	"github.com/google/uuid"
 )
 
 type ToDo struct {
@@ -14,6 +15,8 @@ type ToDo struct {
 	Title string
 	Done  bool
 }
+
+var tmpl = template.Must(template.ParseFiles("index.html"))
 
 func main() {
 	templateFunction := func(w http.ResponseWriter, r *http.Request) {
@@ -29,14 +32,12 @@ func main() {
 	}
 	addFunction := func(w http.ResponseWriter, r *http.Request) {
 		title := r.PostFormValue("title")
-		tmpl := template.Must(template.ParseFiles("index.html"))
 		tmpl.ExecuteTemplate(w, "todo-list-element", ToDo{Id: uuid.New().String(), Title: title, Done: false})
 	}
 	checkFunction := func(w http.ResponseWriter, r *http.Request) {
 		title := r.PostFormValue("title")
 		currentState, _ := strconv.ParseBool(r.PostFormValue("currentState"))
-		id := r.PostFormValue("id")
-		tmpl := template.Must(template.ParseFiles("index.html"))
+		id := r.PathValue("id")
 		tmpl.ExecuteTemplate(w, "todo-list-element", ToDo{Id: id, Title: title, Done: !currentState})
 	}
 
@@ -45,7 +46,7 @@ func main() {
 
 	http.HandleFunc("/", templateFunction)
 	http.HandleFunc("POST /add-todo/", addFunction)
-	http.HandleFunc("POST /check-todo/", checkFunction)
+	http.HandleFunc("POST /check-todo/{id}", checkFunction)
 
 	fmt.Println("Server up and running at port 8000")
 	log.Fatal(http.ListenAndServe(":8000", nil))
