@@ -20,7 +20,6 @@ var tmpl = template.Must(template.ParseFiles("index.html"))
 
 func main() {
 	templateFunction := func(w http.ResponseWriter, r *http.Request) {
-		tmpl := template.Must(template.ParseFiles("index.html"))
 		todos := map[string][]ToDo{
 			"Todos": {
 				{Id: "3f665f1a-64bd-4507-ace7-a10ebc1b7da9", Title: "Finish project proposal", Done: false},
